@@ -29,7 +29,10 @@ pipeline {
         stage('Deploy Container') {
             steps {
                 script {
-                    bat "docker run -d -p 5000:5000 --name %CONTAINER_NAME% %DOCKER_IMAGE%:%DOCKER_TAG%"
+                    bat """
+                    docker rm -f %CONTAINER_NAME% >nul 2>&1 || exit 0
+                    docker run -d -p 5000:5000 --name %CONTAINER_NAME% %DOCKER_IMAGE%:%DOCKER_TAG%
+                    """
                 }
             }
         }
